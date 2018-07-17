@@ -2,6 +2,7 @@
 from __future__ import print_function
 
 import sys
+import os
 import uuid
 import time
 import socket
@@ -65,46 +66,51 @@ def main(master):
     executor.executor_id.value = 'MinimalExecutor'
     executor.name = executor.executor_id.value
     executor.command.value = 'python executor.py'
-    executor.command.environment.variables = [dict(name="FRONTIER_PROXY", value=""),
-                                              dict(name="CMS_LOCAL_SITE", value=""),
-                                              dict(name="PROXY_CACHE", value="")]
+    executor.command.environment.variables = [
+        dict(name="FRONTIER_PROXY", value=os.environ["FRONTIER_PROXY"]),
+        dict(name="CMS_LOCAL_SITE", value=os.environ["CMS_LOCAL_SITE"]),
+        dict(name="PROXY_CACHE", value=os.environ["PROXY_CACHE"])
+        ]
 
     executor.resources = [
         dict(name='mem', type='SCALAR', scalar={'value': EXECUTOR_MEM}),
         dict(name='cpus', type='SCALAR', scalar={'value': EXECUTOR_CPUS}),
-    ]
-    executor.container = dict(type="DOCKER",
-                              docker=dict(
-                                  image="dciangot/dodas-cms:fw",
-                                  privilege=True,
-                                  network="BRIDGE",
-                                  # force_pull_image=True,
-                                  parameters=[dict(key="cap-add", value="SYS_ADMIN")]
-                              ),
-                              volumes=[
-                                  dict(
-                                      mode="RO",
-                                      container_path="/sys/fs/cgroup",
-                                      host_path="/sys/fs/cgroup"
-                                      ),
-                                  dict(
-                                      mode="RW",
-                                      container_path="/opt/exp_sw/cms",
-                                      host_path="/opt/exp_sw/cms"
-                                      ),
-                                  dict(
-                                      mode="RW",
-                                      container_path="/cvmfs",
-                                      host_path="/cvmfs"
-                                      ),
-                                  dict(
-                                      mode="RW",
-                                      container_path="/etc/cvmfs/SITECONF",
-                                      host_path="/etc/cvmfs/SITECONF"
-                                      ),
-                                  ],
-                              
-                              )
+        ]
+
+    executor.container.type = "DOCKER"
+    executor.container.docker.image = "dodasts/cms:fw",
+    executor.container.docker.privileged = True,
+    executor.container.docker.network = "BRIDGE",
+    # force_pull_image=True,
+    executor.container.docker.parameters = [
+                                        dict(
+                                          key="cap-add", 
+                                          value="SYS_ADMIN"
+                                          )
+                                        ]
+
+    executor.container.volumes = [
+        dict(
+            mode="RO",
+            container_path="/sys/fs/cgroup",
+            host_path="/sys/fs/cgroup"
+            ),
+        dict(
+            mode="RW",
+            container_path="/opt/exp_sw/cms",
+            host_path="/opt/exp_sw/cms"
+            ),
+        dict(
+            mode="RW",
+            container_path="/cvmfs",
+            host_path="/cvmfs"
+            ),
+        dict(
+            mode="RW",
+            container_path="/etc/cvmfs/SITECONF",
+            host_path="/etc/cvmfs/SITECONF"
+            ),
+        ]
 
     framework = Dict()
     framework.user = "root"
