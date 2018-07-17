@@ -80,7 +80,7 @@ def main(master):
     executor.container.type = "DOCKER"
     executor.container.docker.image = "dodasts/cms:fw"
     executor.container.docker.privileged = True
-    executor.container.docker.network = "HOST"
+    executor.container.docker.network = "BRIDGE"
     # force_pull_image=True,
     executor.container.docker.parameters = [
                                         dict(
