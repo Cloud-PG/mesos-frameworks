@@ -115,7 +115,7 @@ def main(master):
     framework = Dict()
     framework.user = "root"
     framework.name = "MinimalFramework"
-    framework.hostname = socket.gethostname()
+    framework.hostname = socket.gethostbyname(socket.gethostname())
 
     driver = MesosSchedulerDriver(
         MinimalScheduler(executor),
