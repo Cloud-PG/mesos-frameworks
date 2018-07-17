@@ -14,10 +14,10 @@ from os.path import abspath, join, dirname
 from pymesos import MesosSchedulerDriver, Scheduler, encode_data
 from addict import Dict
 
-TASK_CPU = 0.1
-TASK_MEM = 160
-EXECUTOR_CPUS = 0.1 
-EXECUTOR_MEM = 160
+TASK_CPU = 1
+TASK_MEM = 2000
+EXECUTOR_CPUS = 0 
+EXECUTOR_MEM = 0
 
 
 class MinimalScheduler(Scheduler):
