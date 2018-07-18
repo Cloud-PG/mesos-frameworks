@@ -7,16 +7,14 @@ import uuid
 import time
 import socket
 import signal
-import getpass
 from threading import Thread
-from os.path import abspath, join, dirname
 
-from pymesos import MesosSchedulerDriver, Scheduler, encode_data
+from pymesos import MesosSchedulerDriver, Scheduler
 from addict import Dict
 
 TASK_CPU = 1
 TASK_MEM = 2000
-EXECUTOR_CPUS = 0 
+EXECUTOR_CPUS = 0
 EXECUTOR_MEM = 0
 
 
@@ -40,7 +38,6 @@ class MinimalScheduler(Scheduler):
             task.agent_id.value = offer.agent_id.value
             task.name = 'task {}'.format(task_id)
             task.executor = self.executor
-            task.data = encode_data('Hello from task {}!'.format(task_id))
 
             task.resources = [
                 dict(name='cpus', type='SCALAR', scalar={'value': TASK_CPU}),
@@ -114,7 +111,8 @@ def main(master):
 
     framework = Dict()
     framework.user = "root"
-    framework.name = "MinimalFramework"
+    framework.name = "CMSHTCondorFramework"
+    framework.role = "cmsFW"
     framework.hostname = socket.gethostbyname(socket.gethostname())
 
     driver = MesosSchedulerDriver(
