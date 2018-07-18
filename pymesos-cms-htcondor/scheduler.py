@@ -69,7 +69,7 @@ def main(master):
     executor.command.environment.variables = [
         dict(name="FRONTIER_PROXY", value=os.environ["FRONTIER_PROXY"]),
         dict(name="CMS_LOCAL_SITE", value=os.environ["CMS_LOCAL_SITE"]),
-        dict(name="PROXY_CACHE", value=os.environ["PROXY_CACHE"])
+        dict(name="PROXY_CACHE", value=os.environ["PROXY_CACHE"]),
         ]
 
     executor.resources = [
@@ -80,7 +80,7 @@ def main(master):
     executor.container.type = "DOCKER"
     executor.container.docker.image = "dodasts/cms:fw"
     executor.container.docker.privileged = True
-    executor.container.docker.network = "BRIDGE"
+    # executor.container.docker.network = "BRIDGE"
     # force_pull_image=True,
     executor.container.docker.parameters = [
                                         dict(
